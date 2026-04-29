@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Charlie Boyle</title>
+    
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2230%22 fill=%22%23D04E36%22/></svg>">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,600;1,400&display=swap');
+
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #575756;
+            --line-color: #575756;
+        }
+
+        html {
+            background-color: var(--bg-color);
+            transition: background-color 0.2s ease;
+            height: 100%;
+            scroll-behavior: smooth;
+            font-size: 16px; 
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100svh;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            letter-spacing: -0.05em;
+            transition: background-color 0.2s ease, color 0.2s ease;
+            -webkit-tap-highlight-color: transparent; 
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            
+            -webkit-hyphens: none;
+            -ms-hyphens: none;
+            hyphens: none;
+        }
+
+        /* 7 FULL SCREEN COLOUR THEMES */
+        body.active-0, html.active-0 { --bg-color: #D04E36; --text-color: #FFFFFF; --line-color: #FFFFFF; }
+        body.active-1, html.active-1 { --bg-color: #F8F3A2; --text-color: #000000; --line-color: #000000; }
+        body.active-2, html.active-2 { --bg-color: #744E2D; --text-color: #A1CDEE; --line-color: #A1CDEE; }
+        body.active-3, html.active-3 { --bg-color: #422517; --text-color: #D04E36; --line-color: #D04E36; }
+        body.active-4, html.active-4 { --bg-color: #D1C9DD; --text-color: #832219; --line-color: #832219; }
+        body.active-5, html.active-5 { --bg-color: #254590; --text-color: #E4E4E4; --line-color: #E4E4E4; }
+        body.active-6, html.active-6 { --bg-color: #2D4D4F; --text-color: #F8F3A2; --line-color: #F8F3A2; }
+
+        /* Instantly sync text colours when background flashes by killing leftover transitions */
+        [class*="active-"] .hover-letter, 
+        [class*="active-"] .main-title .letter {
+            transition: none !important;
+        }
+
+        .layout-wrapper {
+            display: flex;
+            min-height: 100svh;
+            width: 100%;
+        }
+
+        /* FIXED LEFT PANEL */
+        .left-panel {
+            width: 40%;
+            position: sticky;
+            top: 0;
+            height: 100svh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 2.5rem;
+            box-sizing: border-box;
+            z-index: 20;
+        }
+
+        .main-title {
+            margin: 0;
+            color: #000000; 
+            white-space: nowrap; 
+            position: relative;
+            z-index: 50; 
+            width: 100%;
+            text-align: left;
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
+            cursor: crosshair;
+        }
+
+        /* Inherit the bright text colour dynamically when full background theme activates */
+        [class*="active-"] .main-title {
+            color: inherit; 
+        }
+
+        .main-title svg { 
+            width: 100%; 
+            height: auto; 
+            max-height: 36svh; 
+            display: block; 
+            overflow: visible; 
+            transform-origin: top left;
+            touch-action: none;
+        }
+
+        .main-title .letter { fill: currentColor; pointer-events: none; }
+        
+        .contact-list { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 0.5rem; 
+            font-size: 1rem; 
+            font-weight: 400; 
+            text-align: left; 
+            position: relative;
+            z-index: 60;
+        }
+        
+        .contact-link { color: inherit; opacity: 0.6; text-decoration: none; transition: opacity 0.2s ease; }
+        .contact-link:hover, a.cv-item:hover { color: #D04E36 !important; opacity: 1; }
+
+        .mobile-contact { display: none !important; }
+
+        /* SCROLLING RIGHT PANEL */
+        .right-panel {
+            width: 60%;
+            padding: 3.5rem 3.75rem 6.25rem 2.5rem; 
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            gap: 3.75rem;
+        }
+
+        /* SECTION STYLING */
+        .cv-group { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 1.25rem; 
+            max-width: 40rem; 
+        }
+        
+        .cv-heading-wrap { display: flex; align-items: center; gap: 1rem; }
+        .cv-heading { font-size: 1.15rem; font-weight: 400; margin: 0; white-space: nowrap; }
+        .cv-divider { flex-grow: 1; height: 1px; background-color: var(--line-color); border: none; margin: 0; opacity: 0.3; transition: background-color 0.2s ease; }
+        
+        .intro-text { font-size: 1.15rem; font-weight: 400; opacity: 1; line-height: 1.4; margin: 0 0 0.15rem 0; text-wrap: pretty; }
+        .intro-text:last-child { margin: 0; }
+        
+        .cv-item { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 0.25rem; 
+            text-decoration: none;
+            color: inherit;
+            transition: opacity 0.2s ease;
+            cursor: pointer;
+        }
+
+        .cv-title { font-size: 1rem; margin: 0; font-weight: 400; }
+        .cv-details { font-size: 0.9rem; margin: 0; opacity: 0.6; font-style: italic; }
+
+        /* ULTRAWIDE & 4K SCREEN SCALING */
+        @media (min-width: 1600px) {
+            html { font-size: 1.1vw; }
+            .left-panel { padding: 4rem; }
+            .right-panel { padding: 5rem 6rem 10rem 4rem; gap: 5rem; }
+            .cv-group { max-width: 45rem; }
+        }
+
+        /* MOBILE PORTRAIT STACKING (PHONES ONLY) */
+        @media (max-width: 767px) and (orientation: portrait) { 
+            .layout-wrapper { flex-direction: column; }
+            .left-panel { width: 100%; height: auto; min-height: auto; position: relative; padding: 2rem 2rem 0 2rem; }
+            
+            /* Increased touch area for mobile */
+            .main-title { padding: 2rem 0; margin: -2rem 0; }
+            .main-title svg { max-height: 26svh; width: auto; max-width: 100%; }
+            
+            .desktop-contact { display: none !important; } 
+            .mobile-contact { display: flex !important; }  
+            
+            .right-panel { width: 100%; padding: 3rem 2rem 3rem 2rem; gap: 3rem; }
+            .cv-group { max-width: 100%; }
+        }
+
+        /* MOBILE LANDSCAPE ADJUSTMENTS */
+        @media (max-height: 600px) and (orientation: landscape) {
+            .left-panel { padding: 1.5rem; }
+            .right-panel { padding: 1.5rem 2rem 4rem 1.5rem; gap: 2.5rem; }
+            .main-title svg { max-height: 50svh; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="layout-wrapper">
+        <aside class="left-panel">
+            <h1 class="main-title" id="interactiveZone">
+                <span style="position:absolute; width:1px; height:1px; overflow:hidden;">Charlie Boyle</span>
+                <svg preserveAspectRatio="xMinYMin meet" version="1.1" viewBox="0 0 597.93 380.71" xmlns="http://www.w3.org/2000/svg">
+                <g>
+                    <path class="letter c1" d="M0,82.53v-0.11C0,32.13,28.47,0,73,0c33.23,0,59.04,20.16,65.14,50.4l0.22,1.11H118.2l-0.78-2.44 C111.22,29.68,95.49,18.38,73,18.38c-31.9,0-52.51,25.15-52.51,64.03v0.11c0,38.88,20.72,64.25,52.51,64.25 c22.38,0,37.89-11.08,44.87-32.13l0.33-1h20.16l-0.22,1.11c-6.09,30.57-31.68,50.4-65.14,50.4C28.59,165.17,0,132.82,0,82.53z"/>
+                    <path class="letter h" d="M150.38,2.66h19.28v63.03h0.44c6.2-12.96,18.72-20.6,35.89-20.6c24.48,0,41.21,18.94,41.21,46.86v70.57h-19.28V95.28 c0-20.83-10.63-33.12-28.58-33.12c-17.84,0-29.69,13.52-29.69,33.12v67.24h-19.28L150.38,2.66L150.38,2.66z"/>
+                    <path class="letter a" d="M257.55,129.94v-0.22c0-19.61,15.29-31.9,41.76-33.46l33.01-1.88v-9.64c0-14.07-9.19-22.6-25.26-22.6 c-14.84,0-24.15,7.09-26.37,17.39l-0.22,1h-18.61l0.11-1.22c1.66-18.94,18.17-34.23,45.31-34.23c27.25,0,44.31,14.73,44.31,37.78 v79.65h-19.27v-18.72h-0.44c-6.76,12.63-20.61,20.94-36,20.94C272.95,164.73,257.55,150.88,257.55,129.94z M300.2,148 c18.17,0,32.13-12.52,32.13-29.25v-9.42l-30.8,1.88c-15.4,0.89-24.26,7.75-24.26,18.5v0.22C277.27,141.02,286.35,148,300.2,148z"/>
+                    <path class="letter r1" d="M366.6,47.3h19.28v19.5h0.44c3.88-13.29,13.85-21.71,26.81-21.71c3.32,0,6.2,0.55,7.75,0.78v18.72 c-1.55-0.55-5.65-1.11-10.3-1.11c-14.96,0-24.7,10.41-24.7,27.92v71.12H366.6V47.3z"/>
+                    <path class="letter l1" d="M428.02,2.66h19.28v159.85h-19.28V2.66z"/>
+                    <path class="letter i" d="M462.63,15.73c0-6.76,5.43-12.08,12.07-12.08c6.76,0,12.08,5.32,12.08,12.08c0,6.65-5.32,12.07-12.08,12.08 C468.05,27.81,462.63,22.38,462.63,15.73z M465.06,47.3h19.28v115.21h-19.28V47.3z"/>
+                    <path class="letter e1" d="M495.46,105.35v-0.11c0-35.67,20.38-60.15,51.84-60.15s50.63,23.37,50.63,57.94v7.09h-82.97 c0.44,23.71,13.52,37.55,34.01,37.55c14.62,0,24.93-7.31,28.25-17.17l0.33-1h18.94l-0.22,1.11c-3.77,19.05-22.6,34.12-47.75,34.12 C515.4,164.73,495.46,141.58,495.46,105.35z M515.29,95.05h63.03c-1.88-22.38-14.29-32.9-31.13-32.9 C530.47,62.15,517.39,73.56,515.29,95.05z"/>
+                    <g transform="translate(0, -30)">
+                        <path class="letter b" d="M6.21,212.08h60.6c27.36,0,45.86,15.95,45.86,39.88v0.22c0,16.51-12.41,32.57-28.91,34.9v0.44 c23.04,2.66,37,18.17,37,39.33v0.22c0,28.14-20.16,44.87-54.17,44.87H6.21V212.08z M26.15,229.7v51.29h29.91 c23.6,0,36.45-9.42,36.45-26.7v-0.22c0-15.73-10.97-24.37-30.24-24.37H26.15z M26.15,298.16v56.16h37.44 c23.93,0,36.67-9.64,36.67-28.03v-0.22c0-18.5-13.07-27.92-38.55-27.92H26.15V298.16z"/>
+                        <path class="letter o" d="M125.23,314.33v-0.22c0-36.67,21.49-59.6,53.28-59.6s53.4,22.82,53.4,59.6v0.22c0,36.78-21.49,59.82-53.28,59.82 C146.61,374.15,125.23,351,125.23,314.33z M212.19,314.33v-0.22c0-27.03-13.29-42.54-33.68-42.54c-20.05,0-33.57,15.62-33.57,42.54 v0.22c0,27.14,13.4,42.76,33.79,42.76C199.01,357.09,212.19,341.36,212.19,314.33z"/>
+                        <path class="letter y" d="M238.16,409.83V394.1c1.66,0.33,3.88,0.66,6.2,0.66c12.19,0,18.94-3.1,23.6-16.17l2.33-6.54l-42.76-115.32h20.6 l31.79,95.93h0.44l31.9-95.93h20.27l-44.96,122.41c-8.2,22.05-18.28,31.57-39.1,31.57C244.7,410.71,240.6,410.27,238.16,409.83z"/>
+                        <path class="letter l2" d="M339.24,212.08h19.28v159.86h-19.28V212.08z"/>
+                        <path class="letter e2" d="M369.41,314.78v-0.11c0-35.67,20.38-60.15,51.84-60.15s50.63,23.37,50.63,57.94v7.09h-82.97 c0.44,23.71,13.51,37.55,34.01,37.55c14.62,0,24.93-7.31,28.25-17.17l0.33-1h18.94l-0.22,1.11c-3.77,19.05-22.6,34.12-47.75,34.12 C389.35,374.15,369.41,351,369.41,314.78z M389.24,304.47h63.03c-1.88-22.38-14.29-32.9-31.13-32.9 C404.42,271.57,391.35,282.98,389.24,304.47z"/>
+                    </g>
+                </g>
+                </svg>
+            </h1>
+
+            <div class="contact-list desktop-contact">
+                <a href="mailto:charlieboyledesign@gmail.com" class="contact-link">charlieboyledesign@gmail.com</a>
+                <a href="https://www.linkedin.com/in/charlie-boyle-52147692/" target="_blank" class="contact-link">LinkedIn</a>
+                <a href="https://instagram.com/charlieboyledesign" target="_blank" class="contact-link">Instagram</a>
+                <a href="https://behance.net/charlieboyledesign" target="_blank" class="contact-link">Behance</a>
+            </div>
+        </aside>
+
+        <main class="right-panel">
+            <div class="cv-group">
+                <p class="intro-text">I am an award-winning British industrial designer with over five years of experience developing products in mobility, healthcare, and consumer goods.</p>
+                <p class="intro-text">Influenced by time spent in both Copenhagen and London, I utilise hands-on prototyping to turn everyday tasks into moments of joy.</p>
+            </div>
+
+            <div class="cv-group">
+                <div class="cv-heading-wrap">
+                    <h2 class="cv-heading">Experience</h2>
+                    <hr class="cv-divider">
+                </div>
+                <a href="https://www.josephjoseph.com/" target="_blank" rel="noopener noreferrer" class="cv-item">
+                    <h3 class="cv-title">Industrial Designer</h3>
+                    <p class="cv-details">Joseph Joseph, London | July 2024 - Present</p>
+                </a>
+                <a href="https://eskildhansen.com/" target="_blank" rel="noopener noreferrer" class="cv-item">
+                    <h3 class="cv-title">Industrial Designer</h3>
+                    <p class="cv-details">Eskild Hansen, Copenhagen | Aug 2022 - July 2024</p>
+                </a>
+                <a href="https://www.wahlross.dk/" target="_blank" rel="noopener noreferrer" class="cv-item">
+                    <h3 class="cv-title">Industrial Design Engineer</h3>
+                    <p class="cv-details">Wahl & Ross, Copenhagen | Feb 2019 - July 2022</p>
+                </a>
+                <div class="cv-item">
+                    <h3 class="cv-title">Junior Design Engineer</h3>
+                    <p class="cv-details">Attention Design, Copenhagen | Aug 2018 - Jan 2019</p>
+                </div>
+            </div>
+
+            <div class="cv-group">
+                <div class="cv-heading-wrap">
+                    <h2 class="cv-heading">Awards & Recognition</h2>
+                    <hr class="cv-divider">
+                </div>
+                <a href="https://instituteofdigitaldentistry.com/intraoral-scanner-reviews/idd-intraoral-scanner-awards-2024/#:~:text=complements%20the%20others.-,Best%20Mid%2DRange%20Scanner,possible%2C%20the%20CORE%20offers%20an%20excellent%20balance%20of%20performance%20and%20value.,-Best%20Entry%2DLevel" target="_blank" rel="noopener noreferrer" class="cv-item">
+                    <h3 class="cv-title">Institute of Digital Dentistry Award Winner</h3>
+                    <p class="cv-details">3Shape, Copenhagen | 2024</p>
+                </a>
+                <a href="https://good-design.org/projects/details-dispenser/" target="_blank" rel="noopener noreferrer" class="cv-item">
+                    <h3 class="cv-title">Good Design Award Gold Winner</h3>
+                    <p class="cv-details">Wahl & Ross, Copenhagen | 2021</p>
+                </a>
+                <a href="https://danishdesignaward.com/nominee/details-hand-sanitising-dispenser/" target="_blank" rel="noopener noreferrer" class="cv-item">
+                    <h3 class="cv-title">Danish Design Award Winner</h3>
+                    <p class="cv-details">Wahl & Ross, Copenhagen | 2021</p>
+                </a>
+                <a href="https://mp.weixin.qq.com/s/77BgcetT7xBJiBIM-FRlFA" target="_blank" rel="noopener noreferrer" class="cv-item">
+                    <h3 class="cv-title">Emerging Forces Interview</h3>
+                    <p class="cv-details">Politecnico di Milano and Tsinghua University | 2021</p>
+                </a>
+                <div class="cv-item">
+                    <h3 class="cv-title">Art and Life Exhibition</h3>
+                    <p class="cv-details">Zhejiang Museum | 2021</p>
+                </div>
+                <a href="https://centmagazine.co.uk/alive-design/#:~:text=Award%3A%20Joseph%20Joseph,real%20commercial%20potential%E2%80%9D." target="_blank" rel="noopener noreferrer" class="cv-item">
+                    <h3 class="cv-title">Joseph Joseph Design Award Winner</h3>
+                    <p class="cv-details">London | 2020</p>
+                </a>
+                <a href="https://en.di-award.org/collections/detail/718.html?page_size%3D1000%26page%3D1%26year%3D%26award_type%3D%26award_group%3D%26category_id%3D" target="_blank" rel="noopener noreferrer" class="cv-item">
+                    <h3 class="cv-title">Design Intelligence Award Shortlisted</h3>
+                    <p class="cv-details">Hangzhou | 2020</p>
+                </a>
+                <a href="https://www.yankodesign.com/2020/10/11/this-award-winning-eco-friendly-floss-was-designed-to-make-flossing-cost-effective-efficient-and-effortless/" target="_blank" rel="noopener noreferrer" class="cv-item">
+                    <h3 class="cv-title">Featured in Yanko Design</h3>
+                    <p class="cv-details">2020</p>
+                </a>
+                <a href="https://www.behance.net/gallery/99287663/Phloss" target="_blank" rel="noopener noreferrer" class="cv-item">
+                    <h3 class="cv-title">Featured by Behance Product Design</h3>
+                    <p class="cv-details">2020</p>
+                </a>
+            </div>
+
+            <div class="cv-group mobile-contact">
+                <div class="contact-list">
+                    <a href="mailto:charlieboyledesign@gmail.com" class="contact-link">charlieboyledesign@gmail.com</a>
+                    <a href="https://www.linkedin.com/in/charlie-boyle-52147692/" target="_blank" class="contact-link">LinkedIn</a>
+                    <a href="https://instagram.com/charlieboyledesign" target="_blank" class="contact-link">Instagram</a>
+                    <a href="https://behance.net/charlieboyledesign" target="_blank" class="contact-link">Behance</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const interactiveZone = document.getElementById('interactiveZone');
+        const body = document.body;
+        const html = document.documentElement;
+        
+        const brandColors = ['#D04E36', '#832219', '#254590', '#2D4D4F'];
+        
+        const textElements = document.querySelectorAll('.cv-heading, .intro-text');
+        textElements.forEach(el => {
+            const text = el.textContent;
+            el.innerHTML = '';
+            for (let i = 0; i < text.length; i++) {
+                if (text[i] === ' ') {
+                    el.appendChild(document.createTextNode(' '));
+                } else {
+                    const span = document.createElement('span');
+                    span.className = 'hover-letter';
+                    span.textContent = text[i];
+                    el.appendChild(span);
+                }
+            }
+        });
+
+        document.querySelectorAll('.hover-letter').forEach(span => {
+            span.addEventListener('mouseenter', function() {
+                if (body.className === '') { 
+                    this.style.transition = 'none';
+                    this.style.color = brandColors[Math.floor(Math.random() * brandColors.length)];
+                }
+            });
+            span.addEventListener('mouseleave', function() {
+                if (body.className === '') {
+                    this.style.transition = 'color 0.2s ease';
+                    this.style.color = '';
+                }
+            });
+        });
+
+        const titleLetters = document.querySelectorAll('.main-title .letter');
+        let idleTimer;
+        let burstInterval;
+
+        function stopIdleAnimation() {
+            clearInterval(burstInterval);
+            titleLetters.forEach(l => l.style.color = '');
+        }
+
+        function startIdleAnimation() {
+            if (body.className !== '') return; 
+            
+            let burstCount = 0;
+            burstInterval = setInterval(() => {
+                titleLetters.forEach(l => {
+                    l.style.color = Math.random() > 0.5 ? brandColors[Math.floor(Math.random() * brandColors.length)] : '';
+                });
+                
+                if (++burstCount >= 8) {
+                    stopIdleAnimation();
+                    resetIdleTimer();
+                }
+            }, 150);
+        }
+
+        function resetIdleTimer() {
+            clearTimeout(idleTimer);
+            stopIdleAnimation();
+            idleTimer = setTimeout(startIdleAnimation, 10000); 
+        }
+
+        document.addEventListener('mousemove', resetIdleTimer);
+        document.addEventListener('touchstart', resetIdleTimer, { passive: true });
+        document.addEventListener('scroll', resetIdleTimer, { passive: true });
+        
+        resetIdleTimer();
+
+        let ticking = false;
+        function updateColor(x, y) {
+            const rect = interactiveZone.getBoundingClientRect();
+            if (rect.width === 0 || rect.height === 0) return;
+            
+            if (body.className === '') {
+                document.querySelectorAll('.hover-letter, .main-title .letter').forEach(el => {
+                    el.style.color = '';
+                    el.style.transition = 'none';
+                });
+                stopIdleAnimation();
+            }
+
+            const relX = Math.max(0, Math.min(1, (x - rect.left) / rect.width));
+            const relY = Math.max(0, Math.min(1, (y - rect.top) / rect.height));
+
+            const index = Math.floor((relX * 10 + relY * 10)) % 7;
+            
+            body.className = `active-${index}`;
+            html.className = `active-${index}`;
+        }
+
+        function clearColor() {
+            body.className = '';
+            html.className = '';
+            document.querySelectorAll('.hover-letter').forEach(el => {
+                el.style.transition = 'color 0.2s ease';
+            });
+        }
+
+        interactiveZone.addEventListener('mousemove', (e) => {
+            if ('ontouchstart' in window) return;
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    updateColor(e.clientX, e.clientY);
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        });
+
+        interactiveZone.addEventListener('mouseleave', clearColor);
+
+        interactiveZone.addEventListener('touchstart', (e) => {
+            if (e.cancelable) e.preventDefault();
+            const touch = e.touches[0];
+            updateColor(touch.clientX, touch.clientY);
+        }, { passive: false });
+
+        interactiveZone.addEventListener('touchmove', (e) => {
+            if (e.cancelable) e.preventDefault();
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    const touch = e.touches[0];
+                    updateColor(touch.clientX, touch.clientY);
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        }, { passive: false });
+
+        interactiveZone.addEventListener('touchend', () => {
+            clearColor();
+            setTimeout(clearColor, 10);
+        });
+
+        interactiveZone.addEventListener('touchcancel', clearColor);
+    </script>
+</body>
+</html>
